@@ -16,15 +16,15 @@ using System.Data;
 
 public class SimpleDB : MonoBehaviour
 {
-    private string dbName = "URI=file:Inventory.db";
+    private string dbName = "URI = file:Inventory.db";
 
     // Start is called before the first frame update
     void Start()
     {
-        CreateDB();
-        AddWeapon("Phaser", 100);
-        DisplayWeapons();
-        Debug.Log("start worked");
+      //Calls Method to Create Database
+    CreateDB();
+    // AddWeapon ();
+    Debug.Log ("SQL started Working!");
     }
 
     // Update is called once per frame
@@ -33,107 +33,21 @@ public class SimpleDB : MonoBehaviour
         // Empty update method
     }
 
+    //TODO: CREATE METHOD FOR CreateDB()
+  
     private void CreateDB()
     {
-        using (var connection = new SqliteConnection(dbName))
+        using (var connection = new SqliteConnection (dbName))
         {
-            connection.Open();
-            using (var command = connection.CreateCommand())
+            connection.Open ();
+            using (var command = connection.CreateCommand ()) 
             {
-                command.CommandText = "CREATE TABLE IF NOT EXISTS weapons (name VARCHAR(20), qte INT);";
-                command.ExecuteNonQuery();
+                command.CommandText = "CREATE TABLE IF NOT EXISTS weapons (name  VARCHAR (20), qte INT)";
+                command.ExecuteNonQuery ();
             }
-            connection.Close();
+            connection.Close ();
         }
     }
-
-    public void AddWeapon(string weaponName, int weaponQte)
-    {
-        using (var connection = new SqliteConnection(dbName))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "INSERT INTO weapons (name, qte) VALUES (@name, @qte);";
-                command.Parameters.AddWithValue("@name", weaponName);
-                command.Parameters.AddWithValue("@qte", weaponQte);
-                command.ExecuteNonQuery();
-            }
-            connection.Close();
-        }
-    }
-
-    public void DisplayWeapons()
-    {
-        using (var connection = new SqliteConnection(dbName))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "SELECT * FROM weapons;";
-                using (IDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Debug.Log("Name: " + reader["name"] + "\tQuantity: " + reader["qte"]);
-                    }
-                    reader.Close();
-                }
-            }
-            connection.Close();
-        }
-    }
-
-    public void GetWeapon(string weaponName)
-    {
-        using (var connection = new SqliteConnection(dbName))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "SELECT * FROM weapons WHERE name = @name;";
-                command.Parameters.AddWithValue("@name", weaponName);
-                using (IDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Debug.Log("Name: " + reader["name"] + "\tQuantity: " + reader["qte"]);
-                    }
-                    reader.Close();
-                }
-            }
-            connection.Close();
-        }
-    }
-
-    public void UpdateWeaponQuantity(string weaponName, int newQuantity)
-    {
-        using (var connection = new SqliteConnection(dbName))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "UPDATE weapons SET qte = @qte WHERE name = @name;";
-                command.Parameters.AddWithValue("@name", weaponName);
-                command.Parameters.AddWithValue("@qte", newQuantity);
-                command.ExecuteNonQuery();
-            }
-            connection.Close();
-        }
-    }
-
-    public void DeleteWeapon(string weaponName)
-    {
-        using (var connection = new SqliteConnection(dbName))
-        {
-            connection.Open();
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "DELETE FROM weapons WHERE name = @name;";
-                command.Parameters.AddWithValue("@name", weaponName);
-                command.ExecuteNonQuery();
-            }
-            connection.Close();
-        }
-    }
+    //TODO: Create Method for adding Weapon into Database
+   
 }

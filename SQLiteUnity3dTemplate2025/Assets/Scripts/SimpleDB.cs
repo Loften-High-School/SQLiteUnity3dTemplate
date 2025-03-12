@@ -16,6 +16,7 @@ using System.Data;
 
 public class SimpleDB : MonoBehaviour
 {
+    //Global Variable Created
     private string dbName = "URI = file:Inventory.db";
 
     // Start is called before the first frame update
@@ -23,7 +24,7 @@ public class SimpleDB : MonoBehaviour
     {
       //Calls Method to Create Database
     CreateDB();
-    // AddWeapon ();
+     AddWeapon ();
     Debug.Log ("SQL started Working!");
     }
 
@@ -33,7 +34,7 @@ public class SimpleDB : MonoBehaviour
         // Empty update method
     }
 
-    //TODO: CREATE METHOD FOR CreateDB()
+    // DONE: TODO: CREATE METHOD FOR CreateDB()
   
     private void CreateDB()
     {
@@ -49,5 +50,20 @@ public class SimpleDB : MonoBehaviour
         }
     }
     //TODO: Create Method for adding Weapon into Database
+
+    public void AddWeapon ()
+    {
+        using (var connection = new SqliteConnection (dbName))
+        {
+            connection.Open ();
+                using (var command = connection.CreateCommand ()) 
+                {
+                    //SQL code goes here
+                    command.CommandText = "INSERT INTO weapons (name, qte) VALUES ('Rifle', '17');";// Adds the SQL code as the argument to add a value of Rifle of 17 as the values
+                    command.ExecuteNonQuery ();
+                }
+            connection.Close ();
+        }
+    }
    
 }

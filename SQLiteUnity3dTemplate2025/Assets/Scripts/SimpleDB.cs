@@ -24,8 +24,10 @@ public class SimpleDB : MonoBehaviour
     {
       //Calls Method to Create Database
     CreateDB();
-     AddWeapon ();
+    AddWeapon ("pistol", 25);
+    AddWeapon("sword", 6);
     Debug.Log ("SQL started Working!");
+    //TODO: call the method and delte Rifle
     }
 
     // Update is called once per frame
@@ -51,19 +53,40 @@ public class SimpleDB : MonoBehaviour
     }
     //TODO: Create Method for adding Weapon into Database
 
-    public void AddWeapon ()
+    public void AddWeapon (string weaponName, int weaponQte)
     {
         using (var connection = new SqliteConnection (dbName))
         {
             connection.Open ();
                 using (var command = connection.CreateCommand ()) 
                 {
-                    //SQL code goes here
-                    command.CommandText = "INSERT INTO weapons (name, qte) VALUES ('Rifle', '17');";// Adds the SQL code as the argument to add a value of Rifle of 17 as the values
+                    //SQL code goes here ... Left Code here
+                    command.CommandText = "INSERT INTO weapons (name, qte) VALUES (@name, @qte);";// Adds the SQL code as the argument to add a value of Rifle of 17 as the values
+                    //commmand.Parameters allows you to add and Assign the parameter with the value from within Values
+                    command.Parameters.AddWithValue ("@name", weaponName);
+                    command.Parameters.AddWithValue ("@qte", weaponQte);
                     command.ExecuteNonQuery ();
                 }
             connection.Close ();
         }
+    }
+
+    public void DeleteWeapon (string weaponName)
+    {
+      using (var connection = new SqliteConnection (dbName))
+        {
+            connection.Open ();
+                using (var command = connection.CreateCommand ()) 
+                {
+                    //SQL code goes here ... Left Code here
+                    //TODO: DELETE FROM weapons WHERE name = @name
+                    command.CommandText = ";"; 
+                    command.Parameters.AddWithValue ("@name", weaponName);
+                    
+                }
+            connection.Close( ); 
+            }
+
     }
    
 }
